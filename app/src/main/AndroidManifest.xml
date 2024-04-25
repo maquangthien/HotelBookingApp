@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Travel"
+        tools:targetApi="31">
+        <activity
+
+            android:name=".Activity.BookingActivity"
+            android:exported="false"
+            />
+        <activity
+            android:name=".AdminActivity.EditDeleteBookingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.SearchBookingAdminView"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.BookingListAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.ListBookingAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.DonateAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.SearchBookingAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.AddBookingAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.ModifyDeleteHotelAdmin"
+            />
+
+        <activity
+            android:name=".AdminActivity.RoomListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.HotelDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AllHotelActivity"
+            android:exported="false" />
+        <activity
+            android:name=".controller.UserProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.HotelByLocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.SearchHotelAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.ListUserAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.Admin_View_RoomList"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.Booking_Management"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.AdminManagementHotel"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.AddRoomType"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.ThemKhachSan"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.addUser"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.Details_of_Reservation"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.List_of_Reservations"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.reservation_summary_manager"
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".Activity.adminProfile" -->
+        <!-- android:exported="false" /> -->
+        <activity
+            android:name=".AdminActivity.adminViewGuestManager"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.SearchGuestUser"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.HotelAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.Stastistical"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.BookingAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.BillAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.AccountManagement"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.SettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".controller.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity.AdminMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.PasswordUtils"
+            android:exported="false" />
+        <activity
+            android:name=".controller.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.DetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.IntroActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Travel">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

@@ -12,6 +12,8 @@
     <color name="darkblue">#000BF6</color>
     <color name="search">#F2F2F2</color>
     <color name="purple_Dark">#512C98</color>
-
+    <color name="Deep_Sky_Blue">#007bff</color>
     <color name="pink">#FF69B4	</color>
+    <color name="Dark_Gray">#A9A9A9</color>
+    <color name="Red">#FF0000</color>
 </resources>

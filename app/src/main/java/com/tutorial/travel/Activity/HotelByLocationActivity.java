@@ -24,14 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HotelByLocationActivity extends AppCompatActivity
-        {
+{
     private static final String TAG = "abc";
     private List<HotelModel> hotelLocationList;
 
     private HotelByLocationAdapter adapter;
     private RecyclerView recyclerView;
 
-   TextView txtLocationName;
+    TextView txtLocationName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

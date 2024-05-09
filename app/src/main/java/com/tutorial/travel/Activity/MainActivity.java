@@ -28,11 +28,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tutorial.travel.Adapter.CategoryAdapter;
 import com.tutorial.travel.Adapter.HotelAdapter;
-import com.tutorial.travel.Adapter.PopularAdapter;
+//import com.tutorial.travel.Adapter.PopularAdapter;
 import com.tutorial.travel.AdminActivity.HotelDetailActivity;
 import com.tutorial.travel.Domain.CategoryDomain;
 import com.tutorial.travel.Domain.PopularDomain;
 import com.tutorial.travel.R;
+import com.tutorial.travel.controller.HistoryBookingActivity;
 import com.tutorial.travel.controller.UserProfileActivity;
 import com.tutorial.travel.database.DatabaseHelper;
 import com.tutorial.travel.model.HotelModel;
@@ -54,9 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView imgSearch;
     EditText edtSearchLocation;
-    TextView txtSeeAllHotel;
-
-
+    TextView txtSeeAllHotel, historyTxt;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         loadHotels();
         addRoomToHotel();
         addReviewToData();
-        initRecyclerView();
+//        initRecyclerView();
         txtUserName.setText(username);
 
 
@@ -110,60 +109,92 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent1);
             }
         });
+        historyTxt = findViewById(R.id.historyTxt);
+        historyTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+                String username = preferences.getString("username", "");
+                Intent intent = new Intent(MainActivity.this, HistoryBookingActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
+            }
+        });
 
-        loadHotels();
-        addRoomToHotel();
-        initRecyclerView();
-        txtUserName.setText(username);
+
 
     }
 
 
-    private void initRecyclerView() {
-
-        ArrayList<PopularDomain> items = new ArrayList<>();
-        String str = getString(R.string.description);
-        items.add(new PopularDomain("Mar caible avendia lago", "Miami Beach", str, 2, true, 4.9, "pic1", true, 1000));
-        items.add(new PopularDomain("Passo Rolle, TN", "Hawaii Beach", str, 2, false, 5.0, "pic2", false, 2500));
-        items.add(new PopularDomain("Mar caible avendia lago", "Miami Beach", str, 2, true, 4.3, "pic3", true, 30000));
-
-        recyclerViewPopular = findViewById(R.id.recyclerview1);
-        recyclerViewPopular.setLayoutManager(new LinearLayoutManager(
-                this,
-                LinearLayoutManager.HORIZONTAL,
-                false
-        ));
-        adapterPopular = new PopularAdapter(items);
-        recyclerViewPopular.setAdapter(adapterPopular);
-
-        // For Category RecyclerView
-        ArrayList<CategoryDomain> catsList = new ArrayList<>();
-        catsList.add(new CategoryDomain("Beaches", "cat1"));
-        catsList.add(new CategoryDomain("Camps", "cat2"));
-        catsList.add(new CategoryDomain("Forest", "cat3"));
-        catsList.add(new CategoryDomain("Desert", "cat4"));
-        catsList.add(new CategoryDomain("Mountain", "cat5"));
-
-        recyclerViewCategory = findViewById(R.id.recyclerview2);
-        recyclerViewCategory.setLayoutManager(new LinearLayoutManager(
-                this,
-                LinearLayoutManager.HORIZONTAL,
-                false
-        ));
-
-        adapterCat = new CategoryAdapter(catsList);
-        recyclerViewCategory.setAdapter(adapterCat);
-    }
-    private  void   addReviewToData(){
+    //    private void initRecyclerView() {
+//
+//        ArrayList<PopularDomain> items = new ArrayList<>();
+//        String str = getString(R.string.description);
+//        items.add(new PopularDomain("Mar caible avendia lago", "Miami Beach", str, 2, true, 4.9, "pic1", true, 1000));
+//        items.add(new PopularDomain("Passo Rolle, TN", "Hawaii Beach", str, 2, false, 5.0, "pic2", false, 2500));
+//        items.add(new PopularDomain("Mar caible avendia lago", "Miami Beach", str, 2, true, 4.3, "pic3", true, 30000));
+//
+//        recyclerViewPopular = findViewById(R.id.recyclerview1);
+//        recyclerViewPopular.setLayoutManager(new LinearLayoutManager(
+//                this,
+//                LinearLayoutManager.HORIZONTAL,
+//                false
+//        ));
+//        adapterPopular = new PopularAdapter(items);
+//        recyclerViewPopular.setAdapter(adapterPopular);
+//
+//        // For Category RecyclerView
+//        ArrayList<CategoryDomain> catsList = new ArrayList<>();
+//        catsList.add(new CategoryDomain("Beaches", "cat1"));
+//        catsList.add(new CategoryDomain("Camps", "cat2"));
+//        catsList.add(new CategoryDomain("Forest", "cat3"));
+//        catsList.add(new CategoryDomain("Desert", "cat4"));
+//        catsList.add(new CategoryDomain("Mountain", "cat5"));
+//
+//        recyclerViewCategory = findViewById(R.id.recyclerview2);
+//        recyclerViewCategory.setLayoutManager(new LinearLayoutManager(
+//                this,
+//                LinearLayoutManager.HORIZONTAL,
+//                false
+//        ));
+//
+//        adapterCat = new CategoryAdapter(catsList);
+//        recyclerViewCategory.setAdapter(adapterCat);
+//    }
+    private void addReviewToData() {
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        ReviewModel review1 = new ReviewModel(1,"Great hotel!", 5.0, 1, 2);
-        databaseHelper.addReview(review1);
 
-        ReviewModel review2 = new ReviewModel(2,"Needs improvement", 3.5, 2, 2);
-        databaseHelper.addReview(review2);
+        // Kiểm tra xem dữ liệu đã tồn tại trong bảng review chưa
+        if (!isReviewDataExists(databaseHelper)) {
+            // Nếu chưa tồn tại, thêm dữ liệu mới vào
+            ReviewModel review1 = new ReviewModel(1,"Great hotel!", 5.0, 1, 2);
+            databaseHelper.addReview(review1);
+
+            ReviewModel review2 = new ReviewModel(2,"Needs improvement", 3.5, 2, 2);
+            databaseHelper.addReview(review2);
+            ReviewModel review3 = new ReviewModel(3,"Bad hotel!", 1.0, 3, 2);
+            databaseHelper.addReview(review3);
+
+            ReviewModel review4 = new ReviewModel(4,"sample", 3.5, 4, 2);
+            databaseHelper.addReview(review4);
+        } else {
+            // Nếu dữ liệu đã tồn tại, không thực hiện thêm mới
+            Log.d(TAG, "Review data already exists. No need to add.");
+        }
     }
+    private boolean isReviewDataExists(DatabaseHelper databaseHelper) {
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
+        // Truy vấn kiểm tra xem có bất kỳ dữ liệu nào trong bảng review hay không
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_REVIEW, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+
+        // Nếu số lượng dòng lớn hơn 0, tức là đã có dữ liệu tồn tại
+        return count > 0;
+    }
     private void addDataToDatabase() {
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
@@ -173,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
             values.put(DatabaseHelper.COLUMN_HOTEL_NAME, "Hữu Nghị");
             values.put(DatabaseHelper.COLUMN_LOCATION, "Viet Nam");
             values.put(DatabaseHelper.COLUMN_STAR_RATING, 5);
-            values.put(DatabaseHelper.COLUMN_IMAGE, "https://i.redd.it/j6myfqglup501.jpg");
+            values.put(DatabaseHelper.COLUMN_IMAGE, "https://www.hoteljob.vn/files/quang-ba-khach-san.jpg");
             db.insert(DatabaseHelper.TABLE_HOTEL, null, values);
 
             values.clear();
@@ -186,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             values.put(DatabaseHelper.COLUMN_HOTEL_NAME, "H2T");
             values.put(DatabaseHelper.COLUMN_LOCATION, "Hồ Chí Minh");
             values.put(DatabaseHelper.COLUMN_STAR_RATING, 4.5);
-            values.put(DatabaseHelper.COLUMN_IMAGE, "https://i.redd.it/j6myfqglup501.jpg");
+            values.put(DatabaseHelper.COLUMN_IMAGE, "https://www.hoteljob.vn/files/Pic/Th%C3%A1ng%204/Khach-san-la-gi-01.jpg");
             db.insert(DatabaseHelper.TABLE_HOTEL, null, values);
 
 
@@ -194,14 +225,14 @@ public class MainActivity extends AppCompatActivity {
             values.put(DatabaseHelper.COLUMN_HOTEL_NAME, "Thanh Bình");
             values.put(DatabaseHelper.COLUMN_LOCATION, "Hà Nội");
             values.put(DatabaseHelper.COLUMN_STAR_RATING, 2);
-            values.put(DatabaseHelper.COLUMN_IMAGE, "https://i.redd.it/j6myfqglup501.jpg");
+            values.put(DatabaseHelper.COLUMN_IMAGE, "https://travelhanoi.com.vn/UserFiles/images/CN1.jpg");
             db.insert(DatabaseHelper.TABLE_HOTEL, null, values);
 
 
             values.put(DatabaseHelper.COLUMN_HOTEL_NAME, "Phúc Long");
             values.put(DatabaseHelper.COLUMN_LOCATION, "Đà Lạt");
             values.put(DatabaseHelper.COLUMN_STAR_RATING, 1);
-            values.put(DatabaseHelper.COLUMN_IMAGE, "https://i.redd.it/j6myfqglup501.jpg");
+            values.put(DatabaseHelper.COLUMN_IMAGE, "https://katahome.com/wp-content/uploads/2021/10/Thiet-ke-khach-san-5-sao-tan-co-dien-phap-dep-kata-81065-04.jpg");
             db.insert(DatabaseHelper.TABLE_HOTEL, null, values);
 
             ContentValues values1 = new ContentValues();
@@ -281,13 +312,49 @@ public class MainActivity extends AppCompatActivity {
         int suiteRoomTypeId = getRoomTypeIdByName("Suite");
 
         // Thêm phòng cho loại phòng "Standard"
-        addRoomForRoomType(db, standardRoomTypeId, "P01", 100, "https://noithatgialinh.vn/wp-content/uploads/2021/12/n1.jpg", "Available", "Xịn xò",2);
+        addRoomForRoomType(db, standardRoomTypeId, "P01", 100, "https://noithatgialinh.vn/wp-content/uploads/2021/12/n1.jpg", "Available", "Phòng tiêu chuẩn có một giường đôi, wifi, nhà vệ sinh và TV",2);
 
         // Thêm phòng cho loại phòng "Deluxe"
-        addRoomForRoomType(db, deluxeRoomTypeId, "P02", 150, "https://noithatgialinh.vn/wp-content/uploads/2021/12/n1.jpg", "Available","Xịn xò", 2);
+        addRoomForRoomType(db, deluxeRoomTypeId, "P02", 150, "https://huyhoanhotel.com/wp-content/uploads/2016/05/IMG_0439.jpg", "Available","Phòng deluxe có một giường đôi và 1 giường đơn,máy lạnh, tủ lạnh, wifi, nhà vệ sinh và TV", 2);
 
         // Thêm phòng cho loại phòng "Suite"
-        addRoomForRoomType(db, suiteRoomTypeId, "P03", 200, "https://noithatgialinh.vn/wp-content/uploads/2021/12/n1.jpg", "Confirmed","Xịn xò", 2);
+        addRoomForRoomType(db, suiteRoomTypeId, "P03", 200, "https://acihome.vn/uploads/15/mau-thiet-ke-noi-that-phong-2-giuong-don-ben-trong-khach-san-3-4-5-sao-2.JPG", "Confirmed","Phòng Suite có 2 giường đôi, view sông ,máy lạnh, tủ lạnh, wifi, nhà vệ sinh và TV", 2);
+
+        // Thêm phòng cho loại phòng "Standard"
+        addRoomForRoomType(db, standardRoomTypeId, "P11", 150, "https://noithatgialinh.vn/wp-content/uploads/2021/12/n1.jpg", "Confirmed", "Phòng tiêu chuẩn có một giường đôi, wifi, nhà vệ sinh và TV",1);
+
+        // Thêm phòng cho loại phòng "Deluxe"
+        addRoomForRoomType(db, deluxeRoomTypeId, "P12", 200, "https://huyhoanhotel.com/wp-content/uploads/2016/05/IMG_0439.jpg", "Available","Phòng deluxe có một giường đôi và 1 giường đơn,máy lạnh, tủ lạnh, wifi, nhà vệ sinh và TV", 1);
+
+        // Thêm phòng cho loại phòng "Suite"
+        addRoomForRoomType(db, suiteRoomTypeId, "P13", 300, "https://acihome.vn/uploads/15/mau-thiet-ke-noi-that-phong-2-giuong-don-ben-trong-khach-san-3-4-5-sao-2.JPG", "Available","Phòng Suite có 2 giường đôi, view sông ,máy lạnh, tủ lạnh, wifi, nhà vệ sinh và TV", 1);
+
+        // Thêm phòng cho loại phòng "Standard"
+        addRoomForRoomType(db, standardRoomTypeId, "P21", 250, "https://noithatgialinh.vn/wp-content/uploads/2021/12/n1.jpg", "Confirmed", "Phòng tiêu chuẩn có một giường đôi, wifi, nhà vệ sinh và TV",3);
+
+        // Thêm phòng cho loại phòng "Deluxe"
+        addRoomForRoomType(db, deluxeRoomTypeId, "P22", 300, "https://huyhoanhotel.com/wp-content/uploads/2016/05/IMG_0439.jpg", "Confirmed","Phòng deluxe có một giường đôi và 1 giường đơn,máy lạnh, tủ lạnh, wifi, nhà vệ sinh và TV", 3);
+
+        // Thêm phòng cho loại phòng "Suite"
+        addRoomForRoomType(db, suiteRoomTypeId, "P23", 500, "https://acihome.vn/uploads/15/mau-thiet-ke-noi-that-phong-2-giuong-don-ben-trong-khach-san-3-4-5-sao-2.JPG", "Available","Phòng Suite có 2 giường đôi, view sông ,máy lạnh, tủ lạnh, wifi, nhà vệ sinh và TV", 3);
+
+        addRoomForRoomType(db, standardRoomTypeId, "P31", 100, "https://noithatgialinh.vn/wp-content/uploads/2021/12/n1.jpg", "Available", "Phòng tiêu chuẩn có một giường đôi, wifi, nhà vệ sinh và TV",4);
+
+        // Thêm phòng cho loại phòng "Deluxe"
+        addRoomForRoomType(db, deluxeRoomTypeId, "P32", 150, "https://huyhoanhotel.com/wp-content/uploads/2016/05/IMG_0439.jpg", "Available","Phòng deluxe có một giường đôi và 1 giường đơn,máy lạnh, tủ lạnh, wifi, nhà vệ sinh và TV", 4);
+
+        // Thêm phòng cho loại phòng "Suite"
+        addRoomForRoomType(db, suiteRoomTypeId, "P33", 200, "https://acihome.vn/uploads/15/mau-thiet-ke-noi-that-phong-2-giuong-don-ben-trong-khach-san-3-4-5-sao-2.JPG", "Available","Phòng Suite có 2 giường đôi, view sông ,máy lạnh, tủ lạnh, wifi, nhà vệ sinh và TV", 4);
+
+
+        addRoomForRoomType(db, standardRoomTypeId, "P41", 100, "https://noithatgialinh.vn/wp-content/uploads/2021/12/n1.jpg", "Confirmed", "Phòng tiêu chuẩn có một giường đôi, wifi, nhà vệ sinh và TV",5);
+
+        // Thêm phòng cho loại phòng "Deluxe"
+        addRoomForRoomType(db, deluxeRoomTypeId, "P42", 150, "https://huyhoanhotel.com/wp-content/uploads/2016/05/IMG_0439.jpg", "Confirmed","Phòng deluxe có một giường đôi và 1 giường đơn,máy lạnh, tủ lạnh, wifi, nhà vệ sinh và TV", 5);
+
+        // Thêm phòng cho loại phòng "Suite"
+        addRoomForRoomType(db, suiteRoomTypeId, "P43", 200, "https://acihome.vn/uploads/15/mau-thiet-ke-noi-that-phong-2-giuong-don-ben-trong-khach-san-3-4-5-sao-2.JPG", "Available","Phòng Suite có 2 giường đôi, view sông ,máy lạnh, tủ lạnh, wifi, nhà vệ sinh và TV", 5);
+
 
 
 
@@ -315,7 +382,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Log.e("addRoomForRoomType", "Thêm mới phòng không thành công");
                 }
-            } else {
+            }
+            else {
                 // Phòng đã tồn tại
                 Log.w("addRoomForRoomType", "Phòng đã tồn tại");
             }
@@ -394,4 +462,3 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
-

@@ -19,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.tutorial.travel.R;
 import com.tutorial.travel.database.DatabaseHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class BookingActivity extends AppCompatActivity {
     TextView checkInTxt, checkOutTxt, countPriceTxt;
     private String hotelName;
@@ -94,6 +98,9 @@ public class BookingActivity extends AppCompatActivity {
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
+        // Lấy thời gian thực khi đặt phòng từ DateUtils
+        String bookingTime = DateUtils.getCurrentDateTime();
+
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_ROOM_ID_FK, roomId);
         values.put(DatabaseHelper.COLUMN_USER_ID_FK, username); // Thay userId bằng giá trị tương ứng
@@ -104,6 +111,7 @@ public class BookingActivity extends AppCompatActivity {
         values.put(DatabaseHelper.COLUMN_PAYMENT_METHOD, paymentMethod);
         values.put(DatabaseHelper.COLUMN_TOTAL_AMOUNT, totalPrice);
         values.put(DatabaseHelper.COLUMN_IS_CONFIRMED, 0); // Giả sử đặt phòng chưa được xác nhận
+        values.put(DatabaseHelper.COLUMN_BOOKING_TIME, bookingTime); // Thời gian thực khi đặt phòng
 
         // Chèn dữ liệu vào bảng booking
         long newRowId = db.insert(DatabaseHelper.TABLE_BOOKING, null, values);
@@ -111,6 +119,7 @@ public class BookingActivity extends AppCompatActivity {
 
         db.close();
     }
+
 
     private void getHotelData(int hotelId) {
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
@@ -149,4 +158,6 @@ public class BookingActivity extends AppCompatActivity {
         hotelNameTxt.setText(hotelName);
         locationTxt.setText(hotelLocation);
     }
+
+
 }

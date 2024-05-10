@@ -3,6 +3,7 @@ package com.tutorial.travel.Activity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateUtils {
 
@@ -23,5 +24,9 @@ public class DateUtils {
             e.printStackTrace();
             return 0;
         }
+    }
+    public static String getCurrentDateTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date(System.currentTimeMillis()));
     }
 }

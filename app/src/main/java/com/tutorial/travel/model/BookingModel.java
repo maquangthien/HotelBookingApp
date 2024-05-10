@@ -10,8 +10,9 @@ public class BookingModel {
     private String paymentMethod;
     private double totalPrice;
     private int isConfirmed;
+    private String bookingTime; // Thêm trường cho thời gian đặt phòng
 
-    public BookingModel(int roomId, String username, String hotelName, String hotelLocation, String checkInDate, String checkOutDate, String paymentMethod, double totalPrice, int isConfirmed) {
+    public BookingModel(int roomId, String username, String hotelName, String hotelLocation, String checkInDate, String checkOutDate, String paymentMethod, double totalPrice, int isConfirmed, String bookingTime) {
         this.roomId = roomId;
         this.username = username;
         this.hotelName = hotelName;
@@ -21,6 +22,7 @@ public class BookingModel {
         this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
         this.isConfirmed = isConfirmed;
+        this.bookingTime = bookingTime;
     }
 
     // Getters and setters
@@ -94,5 +96,13 @@ public class BookingModel {
 
     public void setIsConfirmed(int isConfirmed) {
         this.isConfirmed = isConfirmed;
+    }
+
+    public String getBookingTime() {
+        return bookingTime;
+    }
+
+    public void setBookingTime(String bookingTime) {
+        this.bookingTime = bookingTime;
     }
 }

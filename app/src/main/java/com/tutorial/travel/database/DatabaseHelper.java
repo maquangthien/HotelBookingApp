@@ -89,6 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_USER_ID_FK = "userId";
     public static final String COLUMN_CHECK_IN_DATE = "checkIn";
     public static final String COLUMN_CHECK_OUT_DATE = "checkOut";
+    public static final String COLUMN_BOOKING_TIME = "bookingTime";
     public static final String COLUMN_PAYMENT_METHOD = "payment";
     public static final String COLUMN_TOTAL_AMOUNT = "total";
 
@@ -191,6 +192,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_HOTEL_LOCATION_BOOKING + " TEXT,"
                 + COLUMN_CHECK_IN_DATE + " TEXT,"
                 + COLUMN_CHECK_OUT_DATE + " TEXT,"
+                + COLUMN_BOOKING_TIME + " TEXT,"
                 + COLUMN_PAYMENT_METHOD + " TEXT,"
                 + COLUMN_TOTAL_AMOUNT + " REAL,"
                 + COLUMN_IS_CONFIRMED + " INTEGER,"
@@ -1053,7 +1055,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Kiểm tra cursor có dữ liệu không
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                // Lấy dữ liệu từ cursor và tạo mới đối tượng BookingModel
+                // Lấy dữ liệu từ cursor
                 int roomId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ROOM_ID_FK));
                 String hotelName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_HOTEL_NAME_BOOKING));
                 String hotelLocation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_HOTEL_LOCATION_BOOKING));
@@ -1062,18 +1064,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String paymentMethod = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PAYMENT_METHOD));
                 double totalAmount = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_TOTAL_AMOUNT));
                 int isConfirmed = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_CONFIRMED));
+                String bookingTime = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BOOKING_TIME)); // Lấy thời gian đặt phòng
 
                 // Tạo đối tượng BookingModel và thêm vào danh sách bookingHistory
-                BookingModel booking = new BookingModel(roomId, username, hotelName, hotelLocation, checkInDate, checkOutDate, paymentMethod, totalAmount, isConfirmed);
+                BookingModel booking = new BookingModel(roomId, username, hotelName, hotelLocation, checkInDate, checkOutDate, paymentMethod, totalAmount, isConfirmed, bookingTime);
                 bookingHistory.add(booking);
             } while (cursor.moveToNext());
         }
+        // Đóng cursor và cơ sở dữ liệu
+        cursor.close();
         db.close();
 
         return bookingHistory;
-
-
-
     }
 
 }
